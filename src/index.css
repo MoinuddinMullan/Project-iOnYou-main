@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+@theme {
+  /* --- 🎨 PALETTE (Fixed) --- */
+  --color-cream: #E8E2D8;
+  --color-ash: #BFC6C4;
+  --color-green: #6F8F72;
+  --color-onyx: #0F0F0F;
+  --color-orange: #F2A65A;
+  --color-white: #ffffff;
+  --color-platinum: #E5E5E5;
+
+  /* --- 🌗 ADAPTIVE VARIABLES --- */
+  --bg-main: var(--bg-main);
+  --bg-card: var(--bg-card);
+  --text-main: var(--text-main);    /* Headings */
+  --text-body: var(--text-body);    /* NEW: Paragraphs & General Text */
+  --text-muted: var(--text-muted);  /* NEW: Secondary Text */
+  --text-card: var(--text-card);    /* Text inside colorful cards */
+  --text-accent: var(--text-accent);
+
+  /* Animations (All combined safely in one place) */
+  --animate-float-slow: float 8s ease-in-out infinite;
+  --animate-reveal-text: revealText 1s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  --animate-marquee: marquee 25s linear infinite;
+  --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
+  --animate-eye-blink: eyeBlink 3s infinite;
+  --animate-slide-up-fade: slideUpFade 0.5s ease-out forwards;
+  
+  /* Keyframes */
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+  @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-100%); } }
+  @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+  @keyframes revealText { 0% { transform: translateY(100%); } 100% { transform: translateY(0); } }
+  @keyframes eyeBlink { 0%, 90%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+  @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+}
+
+@layer base {
+  /* ☀️ LIGHT MODE (High Contrast Fix) */
+  :root {
+    --bg-main: var(--color-cream);
+    --bg-card: var(--color-green);
+    
+    /* Text Colors */
+    --text-main: var(--color-green);     /* Headings = Green */
+    --text-body: var(--color-onyx);      /* Body = Black (Readable on Cream) */
+    --text-muted: rgba(15, 15, 15, 0.6); /* Subtitles = Dark Grey */
+    --text-accent: var(--color-orange); 
+    --text-card: var(--color-white);     /* Inside Green Cards = White */
+  }
+
+  /* 🌙 DARK MODE */
+  .dark {
+    --bg-main: #07100E; /* deep, slightly green-black */
+    --bg-card: rgba(255, 255, 255, 0.04);
+
+    /* Text Colors tuned to compliment your palette */
+    --text-main: #E7F2EE;                /* pale greenish for headings */
+    --text-body: var(--color-ash);       /* use your #BFC6C4 for body text in dark */
+    --text-muted: rgba(191, 198, 196, 0.65); /* softer muted */
+    --text-accent: var(--color-orange);
+    --text-card: var(--color-platinum);  /* lighter text inside cards */
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-body); /* Default to Body color, NOT Heading color */
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+}
+
+/* --- 🛠️ UTILITIES --- */
+
+@utility glass-card {
+  background-color: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
+  color: var(--text-card);
+}
+
+@utility tech-card {
+  background-color: var(--bg-card);
+  color: var(--text-card);
+  transition: all 0.3s ease;
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 0 15px var(--color-orange);
+  }
+}
+
+/* Semantic text/bg helpers tied to CSS variables */
+.text-main { color: var(--text-main) !important; }
+.text-body { color: var(--text-body) !important; }
+.text-muted { color: var(--text-muted) !important; }
+.text-card { color: var(--text-card) !important; }
+.text-accent { color: var(--text-accent) !important; }
+
+.bg-bg-main { background-color: var(--bg-main) !important; }
+.bg-bg-card { background-color: var(--bg-card) !important; }
+.bg-accent { background-color: var(--text-accent) !important; }
+
+.border-glass-border { border-color: rgba(255,255,255,0.08) !important; }
+
+.hover\:text-orange:hover { color: var(--color-orange) !important; }
+
+/* Utility for small accent dot */
+.bg-accent { background-color: var(--text-accent); }
+
+/* --- 📅 SCHEDULE PANEL GRIDS --- */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: 80px repeat(5, 1fr);
+  border-collapse: collapse;
+}
+
+.grid-cell {
+  @apply border-stone-300 border p-4 min-h-[100px] transition-colors;
+}
+
+.time-label {
+  @apply flex items-center justify-center text-xs font-semibold text-slate-500 bg-stone-100/50;
+}
+
+.lecture-card {
+  @apply bg-[var(--color-green)] text-white p-3 rounded shadow-sm text-xs flex flex-col gap-1;
+}
+
+.day-header {
+  @apply py-4 text-center font-bold text-slate-700 uppercase tracking-widest text-sm border-b-2 border-[var(--color-green)]/20;
+}
